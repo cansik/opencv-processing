@@ -47,6 +47,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.opencv.bgsegm.BackgroundSubtractorMOG;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -62,11 +63,12 @@ import org.opencv.core.Point;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.CvException;
 import org.opencv.core.Core.MinMaxLocResult;
-import org.opencv.video.BackgroundSubtractorMOG;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.imgproc.Imgproc;
 
 import processing.core.*;
+
+import static org.opencv.bgsegm.Bgsegm.createBackgroundSubtractorMOG;
 
 /**
  * OpenCV is the main class for using OpenCV for Processing. Most of the documentation is found here.
@@ -556,7 +558,7 @@ public class OpenCV {
 	 * Especially useful when working with
 	 * classifier.detectMultiScale().
 	 *
-	 * @param Rect[] rects
+	 * @param rects Rectangles
 	 * 
 	 * @return 
 	 *  A Rectangle[] of java.awt.Rectangle
@@ -621,7 +623,7 @@ public class OpenCV {
 	 * @param backgroundRatio
 	 */
 	public void startBackgroundSubtraction(int history, int nMixtures, double backgroundRatio){
-		backgroundSubtractor = new BackgroundSubtractorMOG(history, nMixtures, backgroundRatio);
+		backgroundSubtractor = createBackgroundSubtractorMOG(history, nMixtures, backgroundRatio);
 	}
 	
 	/**
@@ -1084,8 +1086,6 @@ public class OpenCV {
 	 * 		By default this will normalize the histogram (scale the values to 0.0-1.0). Pass false as the third argument to keep values unormalized.
 	 * @param numBins 
 	 * 		The number of bins into which divide the histogram should be divided.
-	 * @param normalize (optional)
-	 * 		Whether or not to normalize the histogram (scale the values to 0.0-1.0). Defaults to true.
 	 * @return
 	 * 		A Histogram object that you can call draw() on.
 	 */

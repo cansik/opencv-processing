@@ -1,0 +1,52 @@
+group 'gab.opencv'
+version '0.6.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+def javaCvVersion = '1.5.2'
+def outputName = 'opencv-processing'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+configurations {
+    jar.archiveName = outputName + '.jar'
+
+    processing
+    compile.extendsFrom processing
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.runtime
+}
+
+dependencies {
+    // compile
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    // opencv
+    compile group: 'org.bytedeco', name: 'javacv', version: "$javaCvVersion"
+    compile group: 'org.bytedeco', name: 'opencv-platform', version: "4.1.2-$javaCvVersion"
+    compile group: 'org.bytedeco', name: 'openblas-platform', version: "0.3.7-$javaCvVersion"
+
+    // processing
+    processing group: 'org.processing', name: 'core', version: '3.3.7'
+    processing group: 'org.jogamp.jogl', name: 'jogl-all-main', version: '2.3.2'
+    processing group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: '2.3.2'
+}
+
+task fatJar(type: Jar) {
+    archiveName = "$outputName-complete.jar"
+    dependsOn configurations.runtime
+    from {
+        (configurations.runtime - configurations.processing).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}
