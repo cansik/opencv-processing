@@ -5,7 +5,7 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
-def javaCvVersion = '1.5.3'
+def javaCvVersion = '1.5.4'
 def outputName = 'opencv-processing'
 
 repositories {
@@ -30,8 +30,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
     // opencv
-    compile group: 'org.bytedeco', name: 'opencv-platform', version: "4.3.0-$javaCvVersion"
-    compile group: 'org.bytedeco', name: 'openblas-platform', version: "0.3.9-$javaCvVersion"
+    compile group: 'org.bytedeco', name: 'opencv-platform', version: "4.4.0-$javaCvVersion"
+    compile group: 'org.bytedeco', name: 'openblas-platform', version: "0.3.10-$javaCvVersion"
 
     // processing
     processing group: 'org.processing', name: 'core', version: '3.3.7'
