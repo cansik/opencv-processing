@@ -22,7 +22,7 @@ Contributions welcome.
 To build opencv run the following command:
 
 ```bash
-./gradlew fatjar -PjavacppPlatform=linux-x86_64,macosx-x86_64,windows-x86_64,linux-armhf
+./gradlew fatjar -PjavacppPlatform=linux-x86_64,macosx-x86_64,windows-x86_64,linux-armhf,linux-arm64
 ```
 
 ### Installing
