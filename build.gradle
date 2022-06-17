@@ -1,17 +1,17 @@
 plugins {
     id 'java-library'
-    id 'org.bytedeco.gradle-javacpp-platform' version "1.5.4"
+    id 'org.bytedeco.gradle-javacpp-platform' version "1.5.7"
 }
 
 group 'gab.opencv'
-version '0.6.1'
+version '0.6.2'
 
-def javaCvVersion = '1.5.4'
+def javaCvVersion = '1.5.7'
 def outputName = 'opencv-processing'
 
 // We can set this on the command line too this way: -PjavacppPlatform=linux-x86_64,macosx-x86_64,windows-x86_64,etc
 ext {
-    javacppPlatform = 'linux-x86_64,macosx-x86_64,windows-x86_64,linux-armhf' // defaults to Loader.getPlatform()
+    javacppPlatform = 'linux-x86_64,macosx-x86_64,macosx-arm64,windows-x86_64,linux-armhf,linux-arm64' // defaults to Loader.getPlatform()
 }
 
 sourceCompatibility = 1.8
@@ -23,35 +23,33 @@ repositories {
 
 configurations {
     jar.archiveName = outputName + '.jar'
-
-    processing
-    compile.extendsFrom processing
 }
 
 javadoc {
     source = sourceSets.main.allJava
-    classpath = configurations.runtime
+    classpath = configurations.runtimeOnly
 }
 
 dependencies {
     // compile
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
 
     // opencv
-    compile group: 'org.bytedeco', name: 'opencv-platform', version: "4.4.0-$javaCvVersion"
-    compile group: 'org.bytedeco', name: 'openblas-platform', version: "0.3.10-$javaCvVersion"
+    implementation group: 'org.bytedeco', name: 'opencv-platform', version: "4.5.5-$javaCvVersion"
+    implementation group: 'org.bytedeco', name: 'openblas-platform', version: "0.3.19-$javaCvVersion"
 
     // processing
-    processing group: 'org.processing', name: 'core', version: '3.3.7'
-    processing group: 'org.jogamp.jogl', name: 'jogl-all-main', version: '2.3.2'
-    processing group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: '2.3.2'
+    implementation fileTree(include: ["core.jar", "jogl-all-main.jar", "gluegen-rt-main.jar"], dir: 'core-libs')
 }
 
 task fatJar(type: Jar) {
-    archiveName = "$outputName-combined.jar"
-    dependsOn configurations.runtime
+    archiveFileName = "$outputName-combined.jar"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn configurations.runtimeClasspath
     from {
-        (configurations.runtime - configurations.processing).collect {
+        (configurations.runtimeClasspath).filter( {! (it.name =~ /core.jar/ ||
+                it.name =~ /jogl-all-main.jar/ ||
+                it.name =~ /gluegen-rt-main.jar/)}).collect {
             it.isDirectory() ? it : zipTree(it)
         }
     }
