@@ -21,7 +21,7 @@ void setup(){
   opencv = new OpenCV(this, src, true);  
 
   skinHistogram = Mat.zeros(256, 256, CvType.CV_8UC1);
-  Core.ellipse(skinHistogram, new Point(113.0, 155.6), new Size(40.0, 25.2), 43.0, 0.0, 360.0, new Scalar(255, 255, 255), Core.FILLED);
+  Imgproc.ellipse(skinHistogram, new Point(113.0, 155.6), new Size(40.0, 25.2), 43.0, 0.0, 360.0, new Scalar(255, 255, 255), Core.FILLED);
 
  histMask = createImage(256,256, ARGB);
  opencv.toPImage(skinHistogram, histMask);

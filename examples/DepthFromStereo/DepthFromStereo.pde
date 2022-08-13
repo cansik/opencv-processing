@@ -24,7 +24,7 @@ void setup() {
 
   Mat disparity = OpenCV.imitate(left);
 
-  StereoSGBM stereo =  new StereoSGBM(0, 32, 3, 128, 256, 20, 16, 1, 100, 20, true);
+  StereoSGBM stereo = StereoSGBM.create(0, 32, 3, 128, 256, 20, 16, 1, 100, 20, 1);
   stereo.compute(left, right, disparity );
 
   Mat depthMat = OpenCV.imitate(left);
@@ -33,7 +33,7 @@ void setup() {
   depth1 = createImage(depthMat.width(), depthMat.height(), RGB);
   ocvL.toPImage(depthMat, depth1);
 
-  StereoBM stereo2 = new StereoBM();
+  StereoBM stereo2 = StereoBM.create();
   stereo2.compute(left, right, disparity );
   disparity.convertTo(depthMat, depthMat.type());
 
