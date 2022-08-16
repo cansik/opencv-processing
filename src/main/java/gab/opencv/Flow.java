@@ -48,7 +48,9 @@ public class Flow {
 		int flags = runningFlags;
 	    if (!hasFlow) {
 	      prev = m.clone();
-	      flags = Video.OPTFLOW_USE_INITIAL_FLOW;
+		  // no initial flow has been provided so this flag is not needed? => crashes in 4.5.5
+		  // https://docs.opencv.org/4.5.5/dc/d6b/group__video__track.html#gga1d74616b51e7bc4f312a6978690c98b4a9d4430ac75199af0cf6fcdefba30eafe
+	      // flags = Video.OPTFLOW_USE_INITIAL_FLOW;
 	      hasFlow = true;
 	    }
 	    Video.calcOpticalFlowFarneback(prev, m, flow, pyramidScale, nLevels, windowSize, nIterations, polyN, polySigma, flags);
