@@ -17,12 +17,25 @@ OpenCV for Processing is based on the officially supported [OpenCV Java API](htt
 
 Contributions welcome.
 
-### Building
+## Build
+- Install JDK 8 (because of Processing) (JDK 11 for Processing 4)
 
-To build opencv run the following command:
+Run gradle to build a new release package under `/release/opencv-processing.zip`:
 
 ```bash
-./gradlew fatjar -PjavacppPlatform=linux-x86_64,macosx-x86_64,macosx-arm64,windows-x86_64,linux-armhf,linux-arm64
+# windows
+gradlew.bat releaseProcessingLib
+
+# mac / unix
+./gradlew releaseProcessingLib
+```
+
+### Platform Specific
+To build only on a specific platform use the property `javacppPlatform`:
+
+```bash
+# builds with support for all platforms
+gradlew.bat releaseProcessingLib -PjavacppPlatform=linux-x86_64,macosx-x86_64,macosx-arm64,windows-x86_64,linux-armhf,linux-arm64
 ```
 
 ### Installing

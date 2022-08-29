@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'gab.opencv'
-version '0.6.5'
+version '0.6.6'
 
 def javaCvVersion = '1.5.7'
 def outputName = 'opencv_processing'
@@ -27,12 +27,11 @@ configurations {
 
 javadoc {
     source = sourceSets.main.allJava
-    classpath = configurations.runtimeOnly
 }
 
 dependencies {
     // compile
-    testImplementation group: 'junit', name: 'junit', version: '4.11'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 
     // opencv
     implementation group: 'org.bytedeco', name: 'opencv-platform', version: "4.5.5-$javaCvVersion"
@@ -43,7 +42,7 @@ dependencies {
 }
 
 task fatJar(type: Jar) {
-    archiveFileName = "$outputName-combined.jar"
+    archiveFileName = "$outputName-complete.jar"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn configurations.runtimeClasspath
     from {
@@ -55,3 +54,6 @@ task fatJar(type: Jar) {
     }
     with jar
 }
+
+// add processing library support
+apply from: "processing-library.gradle"

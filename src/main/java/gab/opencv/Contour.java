@@ -143,7 +143,7 @@ public class Contour {
 	/**
 	 * Get the points that make up the Contour.
 	 * 
-	 * @return ArrayList<PVector> points
+	 * @return {@literal ArrayList<PVector>} points
 	 */
 	public ArrayList<PVector> getPoints(){
 		return points;

@@ -1,0 +1,122 @@
+// This script adds processing library build support to gradle.
+def releaseRoot = "$rootDir/release"
+
+def releaseName = "$outputName$outputNamePostfix-$version"
+def releaseDirectory = "$releaseRoot/$releaseName"
+
+task releaseProcessingLib {
+    dependsOn {
+        clean
+        build
+        javadoc
+        if (project.hasProperty("disable-fatjar")) {
+            jar
+        } else {
+            fatJar
+        }
+    }
+
+    finalizedBy 'packageRelease', 'renameRelease'
+
+    doFirst {
+        println "releasing library $outputName..."
+
+        // printing current jvm
+        def currentJvm = org.gradle.internal.jvm.Jvm.current()
+        println currentJvm
+
+        println("cleaning release...")
+        project.delete(files(
+                "$releaseDirectory",
+                "$releaseRoot/${releaseName}.zip",
+                "$releaseRoot/${releaseName}.txt"
+        ))
+    }
+
+    doLast {
+        println "creating package..."
+
+        if (project.hasProperty("disable-fatjar")) {
+            println "copy library..."
+            project.copy {
+                from "$buildDir/libs/${outputName}.jar"
+                into "$releaseDirectory/library"
+            }
+
+            println "copy dependencies..."
+            project.copy {
+                from configurations.runtimeClasspath
+                into "$releaseDirectory/library"
+            }
+
+            // Need to delete the Processing jar explicilty, at least when including them as fileTree dependencies
+            delete "$releaseDirectory/library/core.jar"
+            delete "$releaseDirectory/library/jogl-all-main.jar"
+            delete "$releaseDirectory/library/gluegen-rt-main.jar"            
+        } else {
+            println "copy fatjar library..."
+            project.copy {
+                from "$buildDir/libs/$outputName-complete.jar"
+                into "$releaseDirectory/library"
+                rename "$outputName-complete.jar", "${outputName}.jar"
+            }
+        }
+
+
+        println "copy assets (only if necessary)..."
+        project.copy {
+            from("$rootDir") {
+                include "shaders/**",
+                        "native/**"
+            }
+            into "$releaseDirectory/library"
+            exclude "*.DS_Store"
+        }
+
+        println "copy data..."
+        project.copy {
+            from "data"
+            into "$releaseDirectory/library"
+        }
+
+        println "copy javadoc..."
+        project.copy {
+            from "$buildDir/docs/javadoc"
+            into "$releaseDirectory/reference"
+        }
+
+        println "copy additional files..."
+        project.copy {
+            from("$rootDir") {
+                include "README.md",
+                        "library.properties",
+                        "readme/**",
+                        "examples/**",
+                        "src/**"
+            }
+            into "$releaseDirectory"
+            exclude "*.DS_Store", "**/networks/**"
+        }
+
+        println "copy repository library.txt..."
+        project.copy {
+            from "$rootDir/library.properties"
+            into "$releaseRoot"
+            rename "library.properties", "${outputName}.txt"
+        }
+    }
+}
+
+task packageRelease(type: Zip) {
+    mustRunAfter releaseProcessingLib
+
+    archiveFileName = "${outputName}${outputNamePostfix}.zip"
+    from "$releaseDirectory"
+    into "$outputName"
+    destinationDirectory = file("$releaseRoot")
+    exclude "**/*.DS_Store"
+}
+
+task renameRelease {
+    mustRunAfter packageRelease
+}
