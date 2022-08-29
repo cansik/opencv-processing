@@ -52,7 +52,7 @@ int buttonBgColor;
 void setup() {
   frameRate(15);
   
-  video = new Capture(this, 640, 480);
+  video = new Capture(this, "pipeline:autovideosrc");
   //video = new Capture(this, 640, 480, "USB2.0 PC CAMERA");
   video.start();
   

@@ -61,4 +61,3 @@ class Face {
     return false;
   }
 }
-

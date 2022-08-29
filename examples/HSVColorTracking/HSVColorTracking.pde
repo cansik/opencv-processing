@@ -22,7 +22,7 @@ int rangeLow = 20;
 int rangeHigh = 35;
 
 void setup() {
-  video = new Capture(this, 640, 480);
+  video = new Capture(this, "pipeline:autovideosrc");
   video.start();
   
   opencv = new OpenCV(this, video.width, video.height);
@@ -69,7 +69,7 @@ void draw() {
   contours = opencv.findContours(true, true);
   
   // <8> Display background images
-  image(src, 0, 0);
+  image(video, 0, 0);
   image(colorFilteredImage, src.width, 0);
   
   // <9> Check to make sure we've found any contours

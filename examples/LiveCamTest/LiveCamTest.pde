@@ -7,15 +7,14 @@ OpenCV opencv;
 
 void setup() {
   size(640, 480);
-  video = new Capture(this, 640/2, 480/2);
-  opencv = new OpenCV(this, 640/2, 480/2);
+  video = new Capture(this, "pipeline:autovideosrc");
+  opencv = new OpenCV(this, 640, 480);
   opencv.loadCascade(OpenCV.CASCADE_FRONTALFACE);  
 
   video.start();
 }
 
 void draw() {
-  scale(2);
   opencv.loadImage(video);
 
   image(video, 0, 0 );
@@ -35,4 +34,3 @@ void draw() {
 void captureEvent(Capture c) {
   c.read();
 }
-

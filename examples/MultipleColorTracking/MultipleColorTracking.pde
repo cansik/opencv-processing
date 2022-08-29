@@ -35,7 +35,7 @@ PImage[] outputs;
 int colorToChange = -1;
 
 void setup() {
-  video = new Capture(this, 640, 480);
+  video = new Capture(this, "pipeline:autovideosrc");
   opencv = new OpenCV(this, video.width, video.height);
   contours = new ArrayList<Contour>();
   
