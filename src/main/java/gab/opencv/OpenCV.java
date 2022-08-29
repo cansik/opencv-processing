@@ -1352,8 +1352,7 @@ public class OpenCV {
 	}
 
 	private void welcome() {
-		System.out.println("##library.name## ##library.prettyVersion## by ##author##");
-		System.out.println("Using Java OpenCV " + Core.VERSION);
+		System.out.println("Java OpenCV " + Core.VERSION);
 	}
 	
 	/**
