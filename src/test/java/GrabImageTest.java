@@ -2,10 +2,10 @@ import gab.opencv.OpenCV;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class OpticalFlowTest extends PApplet {
+public class GrabImageTest extends PApplet {
 
     public static void main(String... args) {
-        OpticalFlowTest sketch = new OpticalFlowTest();
+        GrabImageTest sketch = new GrabImageTest();
         sketch.runSketch();
     }
 
@@ -19,11 +19,13 @@ public class OpticalFlowTest extends PApplet {
     public void setup() {
         testImage = loadImage(sketchPath("examples/BrightestPoint/robot_light.jpg"));
         opencv = new OpenCV(this, testImage.width, testImage.height);
+        noLoop();
     }
 
     public void draw() {
+        opencv.useColor();
         opencv.loadImage(testImage);
-        opencv.calculateOpticalFlow();
-        println("Optical Flow was running");
+        PImage result = opencv.getSnapshot();
+        image(result, 0, 0);
     }
 }
