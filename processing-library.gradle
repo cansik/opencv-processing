@@ -10,13 +10,12 @@ static def generateProcessingVersion(String version) {
     def sum = 0
     def count = 1
 
-    for(String token : tokens.reverse())
-    {
+    for (String token : tokens.reverse()) {
         try {
             def value = token as Double
             sum += value * count
             count *= 100
-        }catch (ignored) {
+        } catch (ignored) {
         }
     }
 
