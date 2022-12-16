@@ -3,10 +3,6 @@ name: Build
 on:
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Version Tag'
-        required: false
-        default: '0.6.6'
       publishReleases:
         description: 'Publish to Releases'
         required: false
@@ -25,9 +21,23 @@ jobs:
           java-version: '11'
       - uses: gradle/gradle-build-action@v2
 
+      - name: Get Library Version
+        id: get_version
+        run: |
+          lib_version="$(./gradlew properties | grep ^version: | cut -d' ' -f2)"
+          echo "Library Version: $lib_version"
+          echo "version=$lib_version" >> $GITHUB_OUTPUT
+          echo "v_version=v$lib_version" >> $GITHUB_OUTPUT
+        shell: bash
+
       - name: Build Release Package
         run: |
           ./gradlew releaseProcessingLib --no-daemon
+
+      - name: Build Bare Release Package
+        run: |
+          ./gradlew releaseProcessingLib -Pdisable-fatjar -Pbare -PoutputNamePostfix=-bare --no-daemon
+
       # upload dist
       - name: Upload binaries to release
         if: ${{ github.event.inputs.publishReleases == 'true' }}
@@ -35,9 +45,9 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: release/*
-          tag: "v${{ github.event.inputs.tag }}"
-          release_name: "Version ${{ github.event.inputs.tag }}"
-          body: "Prebuilt opencv-processing libs version ${{ github.event.inputs.tag }}."
+          tag: "${{ steps.get_version.outputs.v_version }}"
+          release_name: "Version ${{ steps.get_version.outputs.version }}"
+          body: "Prebuilt opencv-processing libs version ${{ steps.get_version.outputs.version }}."
           overwrite: true
           file_glob: true
           prerelease: true

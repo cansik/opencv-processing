@@ -13,7 +13,7 @@ See the included examples below for an overview of what's possible and links to 
 
 **[OpenCV for Processing reference](http://atduskgreg.github.io/opencv-processing/reference/)**
 
-OpenCV for Processing is based on the officially supported [OpenCV Java API](http://docs.opencv.org/java/), currently at version 4.5.5. In addition to using the wrapped functionality, you can import OpenCV modules and use any of its documented functions: [OpenCV javadocs](http://docs.opencv.org/java/). See the advanced examples (HistogramSkinDetection, DepthFromStereo, and Marker Detection) below for details. (This style of API was inspired by Kyle McDonald's [ofxCv addon](https://github.com/kylemcdonald/ofxCv) for OpenFrameworks.) 
+OpenCV for Processing is based on the officially supported [OpenCV Java API](http://docs.opencv.org/java/), currently at version `4.6.0`. In addition to using the wrapped functionality, you can import OpenCV modules and use any of its documented functions: [OpenCV javadocs](http://docs.opencv.org/java/). See the advanced examples (HistogramSkinDetection, DepthFromStereo, and Marker Detection) below for details. (This style of API was inspired by Kyle McDonald's [ofxCv addon](https://github.com/kylemcdonald/ofxCv) for OpenFrameworks.) 
 
 Contributions welcome.
 
@@ -37,6 +37,11 @@ To build only on a specific platform use the property `javacppPlatform`:
 # builds with support for all platforms
 gradlew.bat releaseProcessingLib -PjavacppPlatform=linux-x86_64,macosx-x86_64,macosx-arm64,windows-x86_64,linux-armhf,linux-arm64
 ```
+
+#### Build Options
+
+- `-Pdisable-fatjar` - Disable fat jar building (all dependencies as separate files)
+- `-Pbare` - Do not include dependencies (opencv, openblas). This allows other libraries to provide the opencv implementation.
 
 ### Installing
 

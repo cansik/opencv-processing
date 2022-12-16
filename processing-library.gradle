@@ -61,13 +61,15 @@ task releaseProcessingLib {
                 into "$releaseDirectory/library"
             }
 
-            println "copy dependencies..."
-            project.copy {
-                from configurations.runtimeClasspath
-                into "$releaseDirectory/library"
+            if (!project.hasProperty("bare")) {
+                println "copy dependencies..."
+                project.copy {
+                    from configurations.runtimeClasspath
+                    into "$releaseDirectory/library"
+                }
             }
 
-            // Need to delete the Processing jar explicilty, at least when including them as fileTree dependencies
+            // Need to delete the Processing jar explicitly, at least when including them as fileTree dependencies
             delete "$releaseDirectory/library/core.jar"
             delete "$releaseDirectory/library/jogl-all-main.jar"
             delete "$releaseDirectory/library/gluegen-rt-main.jar"
