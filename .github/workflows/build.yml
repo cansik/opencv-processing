@@ -34,6 +34,10 @@ jobs:
         run: |
           ./gradlew releaseProcessingLib --no-daemon
 
+      - name: Build Android Release Package
+        run: |
+          ./gradlew releaseProcessingLib -PoutputNamePostfix=-android -PjavacppPlatform=android-arm,android-arm64,android-x86,android-x86_64 --no-daemon
+
       - name: Build Bare Release Package
         run: |
           ./gradlew releaseProcessingLib -Pdisable-fatjar -Pbare -PoutputNamePostfix=-bare --no-daemon
